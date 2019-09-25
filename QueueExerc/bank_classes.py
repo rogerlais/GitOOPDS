@@ -1,6 +1,6 @@
 from datetime import datetime
 import random
-import queueP2
+from QueueExerc.queueP2 import QueueP2
 
 ################################ Client #################################
 class Client(object):
@@ -13,10 +13,9 @@ class Client(object):
 
 ####################### CashTerminal #################################
 
-class CashTerminal(queueP2.QueueP2):
+class CashTerminal(QueueP2):
     def __init__(self):
-        
-        #self.client_list = queueP2.QueueP2()
+        super().__init__()
         return
 
     def incoming_client( self, client ):
@@ -31,11 +30,14 @@ class CashTerminal(queueP2.QueueP2):
     def get_client_queue(self):
         return self.get_queue()
 
+    def get_client_count(self):
+        return self.get_count()
+
 #####################  BankAgency #########################
 class BankAgency(object):
     
     def __init__(self, cash_count):
-        super().__init__(self)
+        #super().__init__(self)
         self.cashes = []
         for _ in range( cash_count):
             self.cashes.append( CashTerminal() )
