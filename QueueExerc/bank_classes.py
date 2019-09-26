@@ -3,29 +3,32 @@ import random
 from QueueExerc.queueP2 import QueueP2
 
 ################################ Client #################################
+
+
 class Client(object):
     def __init__(self):
-        self.timestamp = datetime.timestamp()
+        self.timestamp = datetime.now()
         return
 
-    def get_timestamp( self ):
+    def get_timestamp(self):
         return self.timestamp
 
 ####################### CashTerminal #################################
+
 
 class CashTerminal(QueueP2):
     def __init__(self):
         super().__init__()
         return
 
-    def incoming_client( self, client ):
-        self.insert_data( client )
-        return len( self.get_queue() )
+    def incoming_client(self, client):
+        self.insert_data(client)
+        return len(self.get_queue())
 
-    def process_clients( self, count ):
-        for _ in range( count ):
+    def process_clients(self, count):
+        for _ in range(count):
             self.remove_data()
-        return len( self.get_queue)
+        return len(self.get_queue)
 
     def get_client_queue(self):
         return self.get_queue()
@@ -34,42 +37,44 @@ class CashTerminal(QueueP2):
         return self.get_count()
 
 #####################  BankAgency #########################
+
+
 class BankAgency(object):
-    
+
     def __init__(self, cash_count):
-        #super().__init__(self)
+        # super().__init__(self)
         self.cashes = []
-        for _ in range( cash_count):
-            self.cashes.append( CashTerminal() )
+        for _ in range(cash_count):
+            self.cashes.append(CashTerminal())
         return
 
-    def incoming_client( self ):
+    def incoming_client(self):
         cash_terminal = self.get_prior_terminal()
         client = Client()
-        cash_terminal.incoming_client( client )
+        cash_terminal.incoming_client(client)
         return
 
     def get_prior_terminal(self):
-        #Varre lista de caixas para encontrar o com menos clientes
+        # Varre lista de caixas para encontrar o com menos clientes
         ret = self.cashes[0]
         for terminal in self.cashes:
             if ret.get_client_count() < terminal.get_client_count():
                 ret = terminal
         return ret
 
-    def outcoming_clients( self ):
+    def outcoming_clients(self):
         out = 0
         for c in self.cashes:
-            #remover clientes entre 1 e 2
-            out += c.process_clients( random.randint( 1,2 ))
+            # remover clientes entre 1 e 2
+            out += c.process_clients(random.randint(1, 2))
         return out
 
-    def incoming_clients( self ):
-        #Processa as entradas
+    def incoming_clients(self):
+        # Processa as entradas
         incoming_count = random.randint(4, 16)
-        for cc in range( incoming_count):
+        for cc in range(incoming_count):
             self.incoming_client()
-        #Processa as saídas
+        # Processa as saídas
         self.outcoming_clients()
         return incoming_count
 
@@ -78,7 +83,7 @@ class BankAgency(object):
         client_count = 0
         for c in self.cashes:
             clientlist = c.get_client_queue()
-            for item in range( len( clientlist )):
+            for item in range(len(clientlist)):
                 clientlist += 1
                 total_time += item.get_wait_time()
         return total_time/client_count
