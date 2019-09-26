@@ -1,10 +1,11 @@
 #import sys
 #sys.path.insert(0, './GitOOPDS/QueueExerc')
 import QueueExerc.bank_classes  #import bank_classes
+from datetime import datetime, timedelta
 
 def init_simulation():
     #carrega lista de caixas
-    agency = QueueExerc.bank_classes.BankAgency(5)
+    agency = QueueExerc.bank_classes.BankAgency(5, datetime.now() )
     return agency
 
 
@@ -20,6 +21,7 @@ def main():
     #Inicia simulação temporal por timeslice de 1 minuto, onde podem entrar de 4 a 16 clientes e sair de 1 a 2 clientes pode caixa
     repeat_step = True
     while( repeat_step ):
+        agency.increment_time( 1 )
         incoming = agency.incoming_clients()
         outcoming = agency.outcoming_clients()
         generate_report(incoming, outcoming, agency )

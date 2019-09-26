@@ -1,20 +1,22 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import random
 from QueueExerc.queueP2 import QueueP2
 
-################################ Client #################################
+################################ Class Client #################################
 
 
 class Client(object):
     def __init__(self):
-        self.timestamp = datetime.now()
+        self.time_mark = datetime.now()
         return
 
-    def get_timestamp(self):
-        return self.timestamp
+    def get_time_mark(self):
+        return self.time_mark
 
-####################### CashTerminal #################################
+    def get_wait_time(self, local_time ):
+        return ( local_time - self.time_mark )
 
+####################### Class CashTerminal #################################
 
 class CashTerminal(QueueP2):
     def __init__(self):
@@ -25,28 +27,48 @@ class CashTerminal(QueueP2):
         self.insert_data(client)
         return len(self.get_queue())
 
+    #Recebe a quantidade de clientes a serem processados e retorna a quantidade efetivamente processada
     def process_clients(self, count):
+        ret = 0
         for _ in range(count):
-            self.remove_data()
-        return len(self.get_queue)
+            ret += self.remove_data()
+        return ret
+
+    def remove_data(self):
+        if( len( self.data ) > 0 ):
+            super().remove_data()
+            return 1
+        return 0
 
     def get_client_queue(self):
         return self.get_queue()
 
+    def get_total_queue_time(self, local_time ):
+        ret = timedelta(0)
+        for c in self.data:
+            ret += c.get_wait_time( local_time )
+        return ret
+
     def get_client_count(self):
         return self.get_count()
 
-#####################  BankAgency #########################
+#####################  Class BankAgency #########################
 
 
 class BankAgency(object):
 
-    def __init__(self, cash_count):
+    def __init__(self, cash_count, time ):
         # super().__init__(self)
         self.cashes = []
+        self.local_time = time
         for _ in range(cash_count):
             self.cashes.append(CashTerminal())
         return
+
+    def increment_time( self , delta ):
+        minutes = timedelta(0,0,0,0,delta)
+        self.local_time = self.local_time + minutes
+        return self.local_time
 
     def incoming_client(self):
         cash_terminal = self.get_prior_terminal()
@@ -79,11 +101,13 @@ class BankAgency(object):
         return incoming_count
 
     def get_avg_wait_time(self):
-        total_time = 0
+        total_time = timedelta(0)
         client_count = 0
         for c in self.cashes:
-            clientlist = c.get_client_queue()
-            for item in range(len(clientlist)):
-                clientlist += 1
-                total_time += item.get_wait_time()
-        return total_time/client_count
+            total_time += c.get_total_queue_time( self.local_time )
+            client_count += c.get_client_count()
+        if( client_count > 0 ):
+            #! validar o resultado
+            return total_time/client_count
+        else:
+            return 0
