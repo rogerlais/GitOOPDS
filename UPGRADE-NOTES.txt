@@ -1,0 +1,7 @@
+
+&"C:/Program Files (x86)/Python37/python.exe" -m pip install --upgrade pip --user
+
+&"C:/Program Files (x86)/Python37/python.exe" -m pip install -U rope --user
+
+pip install windows-curses --user
+
