@@ -15,10 +15,12 @@ def init_simulation():
     return agency
 
 
-def generate_report(incoming, outcoming, agency):
+def show_report(incoming, outcoming, agency):
+    print('')
     print( f'Neste ciclo chegaram { incoming } clientes')
     print( f'Neste ciclo sairam { outcoming } clientes')
-    print( f'Neste ciclo chegaram { agency.get_avg_wait_time() } clientes')
+    avg_time = agency.get_avg_wait_time().total_seconds()
+    print( f'Neste ciclo o tempo médio de espera está em { avg_time // 60 } minutos e { avg_time % 60 } segundos')
     return
 
 def get_user_continue():
@@ -39,13 +41,11 @@ def main():
         agency.increment_time( 1 )
         incoming = agency.incoming_clients()
         outcoming = agency.outcoming_clients()
-        generate_report(incoming, outcoming, agency )
+        show_report(incoming, outcoming, agency )
         time.sleep(1)
         repeat_step = get_user_continue()
     return
 
 
 ######################### PONTO DE ENTRADA  #########################
-#value = int(raw_input("Enter the inputs : ") or "42")
-
 main()

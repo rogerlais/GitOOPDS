@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 import random
-from QueueExerc.queueP2 import QueueP2
+from base_classes.queue import QueueP2
 
 ################################ Class Client #################################
 
@@ -19,9 +19,15 @@ class Client(object):
 ####################### Class CashTerminal #################################
 
 class CashTerminal(QueueP2):
-    def __init__(self):
+    
+    def __init__(self, label):
         super().__init__()
+        self._label = label
         return
+
+    @property
+    def label(self):
+        return self._label
 
     def incoming_client(self, client):
         self.insert_data(client)
@@ -61,8 +67,8 @@ class BankAgency(object):
         # super().__init__(self)
         self.cashes = []
         self.local_time = time
-        for _ in range(cash_count):
-            self.cashes.append(CashTerminal())
+        for c in range(cash_count):
+            self.cashes.append(CashTerminal(c))
         return
 
     def increment_time( self , delta ):
