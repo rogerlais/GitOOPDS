@@ -1,16 +1,18 @@
 class QueueP2(object):
     def __init__(self):
-        self.data = []
+        self._queue = []
         return
 
-    def get_queue(self):
-        return self.data
+    @property
+    def queue(self):
+        return self._queue
+
+    @property
+    def count(self):
+        return len(self._queue)
 
     def insert_data(self, newValue):
-        self.data.append(newValue)
+        self._queue.append(newValue)
 
     def remove_data(self):
-        return self.data.pop(0)
-
-    def get_count(self):
-        return len(self.data)
+        return self._queue.pop(0)
