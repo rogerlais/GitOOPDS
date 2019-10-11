@@ -103,3 +103,54 @@ class SimpleLinkedList(object):
             else:
                 current = current.next
         return ret
+
+class CirculeLinkedList(object):
+
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        self._size = 0
+        return
+
+    @property
+    def size(self):
+        return self._size
+
+    def insert_head_value( self, value ):
+        """Insert a node value at head from list"""
+        new_node = SimpleNode( value )
+        return self.insert_head_node( new_node )
+
+    def insert_head_node( self, new_node ):
+        """insert a node at head from list"""
+        if self.size == 0 :
+            self.head = new_node
+            self.tail = new_node
+            new_node.next = new_node
+        else:
+            new_node.next = self.head
+            self.head = new_node
+            self.tail.next = self.head
+        self._size += 1
+        return new_node
+
+    def insert_tail_value( self, value ):
+        new_node = SimpleNode( value )
+        return self.insert_tail_node( new_node )
+
+    def insert_tail_node( self, new_node ):
+        if self._size == 0 :
+            self.head = new_node
+            self.tail = new_node
+            new_node.next = new_node
+        else:
+            self.tail = new_node
+            self.tail.next = self.head
+        self._size += 1
+        return new_node
+
+    '''! criar metodos
+    iterator
+    remove_value
+    insert_orderded_value
+    '''
