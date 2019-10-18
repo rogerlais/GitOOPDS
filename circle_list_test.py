@@ -6,6 +6,9 @@ def main():
     cl.insert_head_value( 10 )
     cl.insert_head_value( 20 )
     cl.insert_tail_value( 'ok' )
+    cl.
+    for node in cl:
+
 
 
 main()
