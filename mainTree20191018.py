@@ -7,6 +7,9 @@ def main():
 
     print( node )
 
+    for n in node.traversal_inorder():
+        print ( n )
+
 main()
 
 
