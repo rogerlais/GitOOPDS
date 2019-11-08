@@ -1,3 +1,4 @@
+
 from base_classes.tree import BinaryTree
 
 def main():
