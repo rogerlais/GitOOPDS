@@ -1,3 +1,19 @@
+#! coloca o diretorio pai no path de imports 
+#Dica de https://stackoverflow.com/questions/714063/importing-modules-from-parent-folder
+from inspect import getsourcefile
+import os.path as path, sys
+current_dir = path.dirname(path.abspath(getsourcefile(lambda:0)))
+sys.path.insert(0, current_dir[:current_dir.rfind(path.sep)])
+from base_classes.linked_list import SimpleLinkedList  # Replace "my_module" here with the module name.
+sys.path.pop(0)  #Remocao opcional após importação
+
+"""
+sys.path.append('..')
+print( sys._base_executable )
+"""
+
+
+
 def main():
     # ar = [ 8,6,3,7,84,9,6,31]
     # arr = [2, 3, 1, 3, 4, 3, 3, 3, 5, 3]
@@ -92,14 +108,13 @@ def timsort(data, ascending=True):
     runs, sorted_runs = [], []
     dataSize = len(data)
     new_run = [data[0]]
-    for i in range(1, dataSize):  # for every i in the range of 1 to length of array
-        if i == dataSize - 1:  # if i is at the end of the list
+    for i in range(1, dataSize):  # do segundo ao último
+        if i == dataSize - 1:  # Atingido o final da lista
             new_run.append(data[i])
             runs.append(new_run)
             break
-        # if the i'th element of the array is less than the one before it
-        if data[i] < data[i-1]:  # if new_run is set to None (NULL)
-            if not new_run:
+        if data[i] < data[i-1]: # testa i-ésimo elemento do arranjo < anterior 
+            if not new_run:  # testa new_run not NULL
                 runs.append([data[i]])
                 new_run.append(data[i])
             else:
@@ -107,18 +122,17 @@ def timsort(data, ascending=True):
                 new_run = [data[i]]
         else:  # else if its equal to or more than
             new_run.append(data[i])
-    # for every item in runs, append it using insertion sort
-    for item in runs:
+    for item in runs: # para todo elemento em runs, agrega usando insert_sort
         sorted_runs.append(tim_insertion_sort(item))
-    # for every run in sorted_runs, merge them
+
+    # para todo arranjo run em sorted_runs, efeuta o merge
     sorted_array = []
     for run in sorted_runs:
         sorted_array = tim_merge(sorted_array, run)  # , ascending, compare )
     return sorted_array
 
 
-def tim_merge(left, right):
-    """Takes two sorted lists and returns a single sorted list by comparing the elements one at a time. [1, 2, 3, 4, 5, 6] """
+def tim_merge(left, right):  # método auxiliar para unir dois arranjos comparando os elementos por vez [1, 2, 3, 4, 5, 6]
     if not left:
         return right
     if not right:
@@ -132,12 +146,12 @@ def tim_insertion_sort(the_array):
     l = len(the_array)
     for index in range(1, l):
         value = the_array[index]
-        pos = binary_search(the_array, value, 0, index - 1)
+        pos = tim_binary_search(the_array, value, 0, index - 1)
         the_array = the_array[:pos] + [value] + the_array[pos:index] + the_array[index+1:]
     return the_array
 
 
-def binary_search(the_array, item, start, end):
+def tim_binary_search(the_array, item, start, end):
     if start == end:
         if the_array[start] > item:
             return start
@@ -146,14 +160,12 @@ def binary_search(the_array, item, start, end):
     if start > end:
         return start
 
-    mid = round((start + end) / 2)
+    mid = round((start + end) / 2)  # ? não usar //?
 
     if the_array[mid] < item:
-        return binary_search(the_array, item, mid + 1, end)
-
+        return tim_binary_search(the_array, item, mid + 1, end)
     elif the_array[mid] > item:
-        return binary_search(the_array, item, start, mid - 1)
-
+        return tim_binary_search(the_array, item, start, mid - 1)
     else:
         return mid
 
