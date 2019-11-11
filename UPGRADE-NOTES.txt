@@ -5,4 +5,4 @@
 
 pip install windows-curses --user
 
-prova 2 enregue agora
+prova 2 enregue agora ok
